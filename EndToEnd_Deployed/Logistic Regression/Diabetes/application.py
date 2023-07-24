@@ -26,3 +26,21 @@ def predict_datapoint():
         Insulin = float(request.form.get('Insulin'))
         DiabetesPedigreeFunction = float(request.form.get('DiabetesPedigreeFunction'))
         Age = float(request.form.get('Age'))
+        
+        new_data = scaler.tranform([[Pregnancies,Glucose,BloodPressure,SkinThickness,Insulin,DiabetesPedigreeFunction,Age]])
+        predict=model.predict(new_data)
+        
+        if(predict[0]==1):
+            result = 'Diabetic'
+        else:
+            result = 'Non-Diabetic'
+            
+    return render_template('single_prediction.html',result=result)
+    
+
+if __name__ == '__main__':
+    app.debug = True
+    app.run(host='0.0.0.0')
+    
+    
+#pip install -r requirements.txt
