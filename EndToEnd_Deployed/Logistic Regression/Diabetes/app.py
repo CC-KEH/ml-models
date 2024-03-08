@@ -13,7 +13,7 @@ model = pickle.load(open('Model/modelForPrediction.pkl','rb'))
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('home.html')
 
 @app.route('/predictdata',methods=['GET','POST'])
 def predict_datapoint():
@@ -24,10 +24,11 @@ def predict_datapoint():
         BloodPressure = float(request.form.get('BloodPressure'))
         SkinThickness = float(request.form.get('SkinThickness'))
         Insulin = float(request.form.get('Insulin'))
+        Bmi = float(request.form.get('BMI'))
         DiabetesPedigreeFunction = float(request.form.get('DiabetesPedigreeFunction'))
         Age = float(request.form.get('Age'))
         
-        new_data = scaler.tranform([[Pregnancies,Glucose,BloodPressure,SkinThickness,Insulin,DiabetesPedigreeFunction,Age]])
+        new_data = scaler.transform([[Pregnancies,Glucose,BloodPressure,SkinThickness,Insulin,Bmi,DiabetesPedigreeFunction,Age]])
         predict=model.predict(new_data)
         
         if(predict[0]==1):
@@ -35,7 +36,7 @@ def predict_datapoint():
         else:
             result = 'Non-Diabetic'
             
-    return render_template('single_prediction.html',result=result)
+    return render_template('single_prediction.html',result=result, color='green' if result=='Non-Diabetic' else 'red')
     
 
 if __name__ == '__main__':
